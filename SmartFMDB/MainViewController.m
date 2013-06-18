@@ -53,6 +53,22 @@
     return cell;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if(editingStyle == UITableViewCellEditingStyleDelete){
+		NSDictionary *item = [self.tableList objectAtIndex:indexPath.row];
+		NSString *query = [NSString stringWithFormat:@"DELETE FROM books WHERE book_id='%@'",[item objectForKey:@"book_id"]];
+		[SmartFMDB query:query];
+		
+		[self reloadTable];
+	}
+}
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ( [[segue identifier] isEqualToString:@"editSegue"] ) {
